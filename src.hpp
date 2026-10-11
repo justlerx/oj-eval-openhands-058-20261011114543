@@ -140,9 +140,7 @@ private:
             const Pokemon& pm = pair.second;
             file << pm.name << " " << pm.id;
             for (size_t i = 0; i < pm.types.size(); i++) {
-                if (i == 0) file << " ";
-                else file << "#";
-                file << pm.types[i];
+                file << " " << pm.types[i];
             }
             file << std::endl;
         }
@@ -159,18 +157,26 @@ private:
         std::string line;
         while (std::getline(file, line)) {
             std::stringstream ss(line);
-            std::string name, typesStr;
+            std::string name;
             int id;
+            std::vector<std::string> types;
             
             ss >> name >> id;
-            std::getline(ss, typesStr);
-            if (!typesStr.empty() && typesStr[0] == ' ') {
-                typesStr = typesStr.substr(1);
+            std::string type;
+            while (ss >> type) {
+                types.push_back(type);
             }
             
             try {
-                std::vector<std::string> types = parseTypes(typesStr.c_str());
-                Pokemon pm(name.c_str(), id, types);
+                // Convert types vector to # separated string for validation
+                std::string typesStr;
+                for (size_t i = 0; i < types.size(); i++) {
+                    if (i > 0) typesStr += "#";
+                    typesStr += types[i];
+                }
+                
+                std::vector<std::string> validatedTypes = parseTypes(typesStr.c_str());
+                Pokemon pm(name.c_str(), id, validatedTypes);
                 pokemonMap[id] = pm;
             } catch (...) {
                 // Skip invalid entries
