@@ -183,7 +183,11 @@ private:
 public:
     explicit Pokedex(const char *_fileName) : fileName(_fileName) {
         initializeTypeChart();
-        loadFromFile();
+        try {
+            loadFromFile();
+        } catch (...) {
+            // Ignore file loading errors
+        }
     }
 
     ~Pokedex() {
