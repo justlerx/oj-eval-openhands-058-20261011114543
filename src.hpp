@@ -11,13 +11,13 @@
 
 class BasicException {
 protected:
-    const char *message;
+    std::string message;
 
 public:
     explicit BasicException(const char *_message) : message(_message) {}
 
     virtual const char *what() const {
-        return message;
+        return message.c_str();
     }
 };
 
@@ -119,7 +119,8 @@ private:
         
         while (std::getline(ss, token, '#')) {
             if (!isValidType(token)) {
-                throw ArgumentException(("Argument Error: PM Type Invalid (" + token + ")").c_str());
+                std::string msg = "Argument Error: PM Type Invalid (" + token + ")";
+                throw ArgumentException(msg.c_str());
             }
             result.push_back(token);
         }
@@ -191,11 +192,13 @@ public:
 
     bool pokeAdd(const char *name, int id, const char *types) {
         if (!isValidName(name)) {
-            throw ArgumentException(("Argument Error: PM Name Invalid (" + std::string(name) + ")").c_str());
+            std::string msg = "Argument Error: PM Name Invalid (" + std::string(name) + ")";
+            throw ArgumentException(msg.c_str());
         }
         
         if (id <= 0) {
-            throw ArgumentException(("Argument Error: PM ID Invalid (" + std::to_string(id) + ")").c_str());
+            std::string msg = "Argument Error: PM ID Invalid (" + std::to_string(id) + ")";
+            throw ArgumentException(msg.c_str());
         }
         
         std::vector<std::string> parsedTypes;
@@ -224,7 +227,8 @@ public:
 
     bool pokeDel(int id) {
         if (id <= 0) {
-            throw ArgumentException(("Argument Error: PM ID Invalid (" + std::to_string(id) + ")").c_str());
+            std::string msg = "Argument Error: PM ID Invalid (" + std::to_string(id) + ")";
+            throw ArgumentException(msg.c_str());
         }
         
         auto it = pokemonMap.find(id);
@@ -237,7 +241,8 @@ public:
 
     std::string pokeFind(int id) const {
         if (id <= 0) {
-            throw ArgumentException(("Argument Error: PM ID Invalid (" + std::to_string(id) + ")").c_str());
+            std::string msg = "Argument Error: PM ID Invalid (" + std::to_string(id) + ")";
+            throw ArgumentException(msg.c_str());
         }
         
         auto it = pokemonMap.find(id);
@@ -302,11 +307,13 @@ public:
 
     float attack(const char *type, int id) const {
         if (!isValidType(type)) {
-            throw ArgumentException(("Argument Error: PM Type Invalid (" + std::string(type) + ")").c_str());
+            std::string msg = "Argument Error: PM Type Invalid (" + std::string(type) + ")";
+            throw ArgumentException(msg.c_str());
         }
         
         if (id <= 0) {
-            throw ArgumentException(("Argument Error: PM ID Invalid (" + std::to_string(id) + ")").c_str());
+            std::string msg = "Argument Error: PM ID Invalid (" + std::to_string(id) + ")";
+            throw ArgumentException(msg.c_str());
         }
         
         auto it = pokemonMap.find(id);
